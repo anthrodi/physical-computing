@@ -1,0 +1,108 @@
+/*
+Lab 2 - Experiment 2
+Anthony Rodi
+DIGF2B03 Physical Computing
+OCAD University
+Created on 01/19/15
+*/
+
+//define button & LEDs
+
+const int buttonPin = 13;
+const int ledG = 12; //green LED
+const int ledO = 11; //orange LED
+const int ledR = 10; //red LED
+
+//is button pressed?
+int buttonState = 0; //current state
+int buttonPushed = 0; //counter
+int lastButtonState = 0; //previous state
+
+
+
+
+
+void setup() {
+  pinMode(buttonPin, INPUT);
+  pinMode(ledG, OUTPUT);
+  pinMode(ledO, OUTPUT);
+  pinMode(ledR, OUTPUT);
+}
+
+void loop(){
+  buttonState = digitalRead(buttonPin);
+  
+  if (buttonState != lastButtonState) {
+    
+    if (buttonState == HIGH) {
+      buttonPushed++;
+    }
+    else {
+      digitalWrite(ledG,LOW);
+    }
+    lastButtonState = buttonState;
+    
+    if (buttonPushed == 1) {
+    digitalWrite(ledG,HIGH);
+    digitalWrite(ledR,HIGH);
+      delay(200);
+      digitalWrite(ledG,LOW);
+      digitalWrite(ledR,LOW);
+      delay(200);
+      digitalWrite(ledG,HIGH);
+      digitalWrite(ledR,HIGH);
+      delay(200);
+      digitalWrite(ledG,LOW);
+      digitalWrite(ledR,LOW);
+      delay(200);
+    }
+    else {
+      digitalWrite(ledG,LOW);
+      digitalWrite(ledR,LOW);
+      
+    }
+    lastButtonState = buttonState;
+    
+    if (buttonPushed == 2) {
+      digitalWrite(ledO,HIGH);
+      digitalWrite(ledG,HIGH);
+      delay(200);
+      digitalWrite(ledO,LOW);
+      digitalWrite(ledG,LOW);
+      delay(200);
+      digitalWrite(ledO,HIGH);
+      digitalWrite(ledG,HIGH);
+      delay(200);
+      digitalWrite(ledO,LOW);
+      digitalWrite(ledG,LOW);
+      delay(200);
+    }
+    else {
+      digitalWrite(ledO,LOW);
+      digitalWrite(ledG,LOW);    
+    }
+    lastButtonState = buttonState;
+  }
+  
+   if (buttonPushed == 3) {
+      digitalWrite(ledR,HIGH);
+      digitalWrite(ledO,HIGH);
+      delay(200);
+      digitalWrite(ledR,LOW);
+      digitalWrite(ledO,LOW);
+      delay(200);
+      digitalWrite(ledR,HIGH);
+      digitalWrite(ledO,HIGH);
+      delay(200);
+      digitalWrite(ledR,LOW);
+      digitalWrite(ledO,LOW);
+      delay(200);
+      buttonPushed = 0;
+    }
+    else {
+      digitalWrite(ledR,LOW);
+      digitalWrite(ledO,LOW);  
+    }
+    lastButtonState = buttonState; 
+}
+  
