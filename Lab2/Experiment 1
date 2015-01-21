@@ -1,0 +1,69 @@
+/*
+Lab 2 - Experiment 1
+Anthony Rodi
+DIGF2B03 Physical Computing
+OCAD University
+Created on 01/19/15
+*/
+
+//define buttons & LED
+
+const int buttonYel = 12;
+const int buttonRed = 11;
+const int buttonBlu = 10;
+const int ledPin = 13;
+
+//is button pressed?
+int buttonState1 = 0;
+int buttonState2 = 0;
+int buttonState3 = 0;
+
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonYel, INPUT);
+  pinMode(buttonRed, INPUT);
+  pinMode(buttonBlu, INPUT);
+}
+
+void loop(){
+  //read state of each button
+  buttonState1 = digitalRead(buttonYel);
+  buttonState2 = digitalRead(buttonRed);
+  buttonState3 = digitalRead(buttonBlu);
+  
+  //check if Yellow Button is pressed
+  if (buttonState1 == HIGH) {
+    digitalWrite(ledPin,HIGH);
+    delay(1000);
+    digitalWrite(ledPin,LOW);
+  }
+  else
+  digitalWrite(ledPin,LOW);
+
+
+ //check if Red Button is pressed
+  if (buttonState2 == HIGH) {
+    digitalWrite(ledPin,HIGH);
+    delay(200);
+    digitalWrite(ledPin,LOW);
+    delay(200);
+    
+  }
+  else
+  digitalWrite(ledPin,LOW);
+
+
+ //check if Blue Button is pressed
+  if (buttonState3 == HIGH) {
+    digitalWrite(ledPin,HIGH);
+    delay(100);
+    digitalWrite(ledPin,LOW);
+    delay(100);
+  }
+  else
+  digitalWrite(ledPin,LOW);
+}
+
+
+
