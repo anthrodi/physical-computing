@@ -1,0 +1,21 @@
+/*
+Lab 2 - Experiment 3
+Anthony Rodi
+DIGF2B03 Physical Computing
+OCAD University
+Created on 01/19/15
+*/
+
+int ledPin = 10; //LED connected to digital pin 10
+
+void setup() {                
+  
+  pinMode(ledPin, OUTPUT);     
+}
+
+void loop() {
+  analogWrite(ledPin, 50);   
+  delay(2000);  // 
+  analogWrite(ledPin, 200);    
+  delay(2000);               
+}
