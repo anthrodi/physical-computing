@@ -1,0 +1,203 @@
+
+#define COMMON_ANODE //reverse RGB values for Common Anode
+
+int redPin = 11;
+int greenPin = 10;
+int bluePin = 9;
+
+int led1 = 5;
+int led2 = 4;
+int led3 = 3;
+
+int ledcolour = 0;
+
+typedef struct {
+  int pin;
+  boolean pressed;
+  boolean player;
+  int colour;
+  int val;
+} buttons;
+
+int p1count = 0;
+int p2count = 0;
+
+buttons button[5];
+
+// Generally, you shuould use "unsigned long" for variables that hold time
+// The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;        // will store last time LED was updated
+
+// constants won't change :
+long interval = 500;           // interval at which to blink (milliseconds)
+
+void buttonSetup() {
+  
+ button[0].pin = 6;
+ button[0].pressed = false;
+ button[0].player = 1;
+ button[0].colour = 0;
+ button[0].val = 0;
+   
+ button[1].pin = 7;
+ button[1].pressed = false;
+ button[1].player = 1;
+ button[1].colour = 1;
+ button[1].val = 0;
+   
+ button[2].pin = 8;
+ button[2].pressed = false;
+ button[2].player = 1;
+ button[2].colour = 2;
+ button[2].val = 0;
+   
+ button[3].pin = 12;
+ button[3].pressed = false;
+ button[3].player = 2;
+ button[3].colour = 0;
+ button[3].val = 0;
+   
+ button[4].pin = 13;
+ button[4].pressed = false;
+ button[4].player = 2;
+ button[4].colour = 1;
+ button[4].val = 0;
+ 
+ button[5].pin = 13;
+ button[5].pressed = false;
+ button[5].player = 2;
+ button[5].colour = 2;
+ button[5].val = 0;
+}
+
+void setup() { 
+    Serial.begin(9600);
+    
+  //define RGB
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  
+  //setup RGB
+  digitalWrite(redPin, HIGH);
+  digitalWrite(greenPin, HIGH);
+  digitalWrite(bluePin, HIGH);
+
+  //define regular LEDs
+  pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
+
+  //set LEDs to start off
+  digitalWrite(led1, LOW);
+  digitalWrite(led2, LOW);
+  digitalWrite(led3, LOW);
+    
+  buttonSetup();
+  
+  for (int i=0; i <= 5; i++){
+    pinMode(button[i].pin, INPUT_PULLUP);
+  }
+  
+  randomSeed(analogRead(0));
+  
+}
+
+void loop() {
+  
+    unsigned long currentMillis = millis();
+  
+   for (int i=0; i <= 5; i++){
+        
+    button[i].val = digitalRead(button[i].pin);
+     
+    if(button[i].val == HIGH && button[i].pressed == true) {
+      button[i].pressed = false;
+    } 
+     
+    if(button[i].val == LOW && button[i].pressed == false) {
+      button[i].pressed = true;
+      if (ledcolour == button[i].colour) {
+          if (button[i].player == 1) {
+            p1count++;
+            Serial.print("\t button = ");    
+            Serial.println(i);    
+            Serial.print("\t player 1 = ");      
+            Serial.println(p1count); 
+          } else if(button[i].player == 2){
+            p2count++;
+            Serial.print("\t button = ");    
+            Serial.println(i);    
+            Serial.print("\t player 2 = ");      
+            Serial.println(p2count); 
+          }
+      } else {
+          if (button[i].player == 1) {
+            p1count--;
+            Serial.print("\t button = ");    
+            Serial.println(i);    
+            Serial.print("\t player 1 = ");      
+            Serial.println(p1count); 
+          } else if(button[i].player == 2){
+            p2count--;
+            Serial.print("\t button = ");    
+            Serial.println(i);    
+            Serial.print("\t player 2 = ");      
+            Serial.println(p2count); 
+          }
+      }
+    }
+  
+
+     
+   } 
+   
+    if(currentMillis - previousMillis >= interval) {
+    // save the last time you blinked the LED 
+    previousMillis = currentMillis;   
+
+    ledcolour = random(0,3);
+
+    switch(ledcolour){
+    case 0:
+      setColour(0,255,0); //set LED Green
+      break;
+
+    case 1:
+      setColour(0,0,255); //set LED Blue
+      break;
+      
+    case 2:
+      setColour(128,0,255); //set LED Pink
+      break;
+    }
+  }
+  
+    if (p1count >= 10) {
+      digitalWrite(led1,HIGH);
+    }
+    else {
+      digitalWrite(led1,LOW);
+    }
+    
+    if (p2count >= 10) {
+      digitalWrite(led1,HIGH);
+    }
+    else {
+      digitalWrite(led1,LOW);
+    }
+  
+}
+
+
+void setColour(int red, int green, int blue)
+{
+#ifdef COMMON_ANODE
+  red = 255 - red;
+  green = 255 - green;
+  blue = 255 - blue;
+#endif
+  analogWrite(redPin, red);
+  analogWrite(greenPin, green);
+  analogWrite(bluePin, blue);
+}
