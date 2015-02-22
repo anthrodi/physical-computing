@@ -15,6 +15,8 @@ Struct Resource for Arduino, Alexander Brevig, http://playground.arduino.cc/Code
 
 #include "Tlc5940.h" //Library for TLC5940 LED driver
 
+int powerPin = 2; //Power Switch
+int powerState = 0;
 
 int p1_led[] = {14, 12, 10, 8, 6, 4, 2, 0}; //Player 1's indicator LEDs on the TLC5940
 int p2_led[] = {1, 3, 5, 7, 9, 11, 13, 15}; //Player 2's indicator LEDS on the TLC5940
@@ -89,7 +91,10 @@ void buttonSetup() {
  button[5].val = 0;
 }
 
-void setup() { 
+void setup() {
+  
+  pinMode(powerPin,INPUT_PULLUP);
+  
   Serial.begin(9600); //Start telling me things
   Tlc.init();
     
@@ -132,8 +137,13 @@ void light_led() {
   }
   
 }
+ 
 
 void loop() {
+  
+  powerState = digitalRead(powerPin); //Read Power Switch
+  
+  if(powerState == LOW) {
   
    unsigned long currentMillis = millis();
   
@@ -237,6 +247,17 @@ void loop() {
     
     delay(1);
   
+} //end loop
+
+  //if Power Switch is off
+  else {
+    
+    Tlc.update();
+    clear_real();
+    setColour(0,0,0);
+    p1count=0;
+    p2count=0;
+}
 }
 
 
