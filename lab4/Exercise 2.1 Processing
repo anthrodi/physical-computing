@@ -1,0 +1,82 @@
+/* Lab 4 - Excercise 2.1
+Anth Rodi
+DIGF 2B03 Physical Computing
+created on 03/01/15
+*/
+
+import processing.serial.*; 
+ 
+ float ballX;
+ float ballY;
+ float ballIfX = 0.0;
+ float ballIfY = 0.0;
+ int ballSize = 50;
+ boolean hover = false;
+ boolean locked = false;
+ 
+ Serial port; 
+ 
+ void setup()  {
+ 
+ size(200, 200);
+ ballX = width/2.0;
+ ballY = height/2.0;
+ ellipseMode(RADIUS);
+ println(Serial.list());  
+ port = new Serial(this, Serial.list()[4], 9600); 
+
+}
+ 
+ void draw() { 
+   
+ background(0);
+ 
+ if (mouseX > ballX-ballSize && mouseX < ballX+ballSize &&
+ 
+ mouseY > ballY-ballSize && mouseY < ballY+ballSize) {
+   hover = true;
+   if(!locked) {
+     stroke(255);
+     fill(153);
+      port.write(mouseX);
+   }
+   else {
+     stroke(153);
+     fill(153);
+     hover = false;
+      port.write(0);
+   }
+ }
+ 
+ //draw ball
+   ellipse(ballX, ballY, ballSize, ballSize);
+   fill(153);
+   stroke(153);
+ 
+}
+
+void mousePressed() {
+  if(hover) {
+    locked = true;
+    fill(255, 255, 255);
+  }
+  else {
+    locked = false;
+  }
+  ballIfX = mouseX-ballX;
+  ballIfY = mouseY-ballY;
+}
+
+void mouseDragged() {
+  if(locked) {
+    ballX = mouseX-ballIfX;
+    ballY = mouseY-ballIfY;
+  }
+}
+
+void mouseReleased() {
+  locked = false;
+}
+ 
+
+ 
