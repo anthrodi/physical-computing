@@ -2,7 +2,7 @@
 Lab 4 - Excercise 2.1
 Anth Rodi
 DIGF 2B03 Physical Computing
-created on March 1
+created on 03/01/15
 */
 
 #include <Servo.h> 
