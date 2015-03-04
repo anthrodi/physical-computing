@@ -1,0 +1,34 @@
+/* 
+Lab 4 - Excercise 2.1
+Anth Rodi
+DIGF 2B03 Physical Computing
+created on 03/01/15
+*/
+
+#include <Servo.h> 
+ 
+Servo myservo;
+ 
+int pos = 0;    // servo position
+ 
+void setup() { 
+  
+  Serial.begin(9600); //tell me things
+  myservo.attach(9);  // attaches servo to pin 9
+} 
+ 
+ 
+void loop() { 
+byte pos;
+
+  // check if data has been sent from the computer:
+  if (Serial.available()) {
+    // read the most recent byte
+    pos = Serial.read();
+    // set the position of the servo
+    myservo.write(pos);
+    delay(15);
+    
+  }
+  
+} 
