@@ -1,0 +1,54 @@
+import processing.serial.*;
+
+int lf = 10;  // linefeed in ASCII
+String myString = null; //var to hold war serial data
+int value; // var to hold hold serial data from Bean
+Serial myPort;  // the serial port
+PImage img1;
+PImage img2;
+PImage img3;
+PImage img4;
+PImage img5;
+PImage img6;
+
+void setup() {
+  size(500,500);
+  background(0);
+  img1 = loadImage("cat1.jpg");
+  img2 = loadImage("cat2.jpg");
+  img3 = loadImage("cat3.jpg");
+  img4 = loadImage("cat4.jpg");
+  img5 = loadImage("cat5.jpg");
+  img6 = loadImage("cat6.jpg");
+  
+  
+  // list all the available serial ports
+  println(Serial.list());
+  // the bean is the 5th port so I open Serial.list()[4].
+  // open whatever port is the one you're using.
+  myPort = new Serial(this, "/tmp/tty.LightBlue-Bean", 9600);
+  myPort.clear();
+  // throw out the first reading, in case we started reading 
+  // in the middle of a string from the sender.
+  myString = myPort.readStringUntil(lf);
+  myString = null; 
+}
+
+void draw() {
+  while (myPort.available() > 0) {
+    myString = myPort.readStringUntil(lf);
+    if (myString != null) {
+      myString = trim(myString);
+      value = int(myString);
+      println(value);
+
+      // change background colour
+      if (value == 1) { image(img1,0,0); }
+      if (value == 2) { image(img2,0,0); }
+      if (value == 3) { image(img3,0,0); }
+      if (value == 4) { image(img4,0,0); }
+      if (value == 5) { image(img5,0,0); }
+      if (value == 6) { image(img6,0,0); }
+    }
+  }
+}
