@@ -5,16 +5,10 @@
 /*if you the version of NFC Shield from SeeedStudio is v2.0.*/
 #define PN532_CS 10
 PN532 nfc(PN532_CS);
+
 #define  NFC_DEMO_DEBUG 1
 
-int vibe = 4;
-
-void setup(void) { 
-
-pinMode(vibe,OUTPUT);
-pinMode(3,OUTPUT);
-digitalWrite(3,LOW);
-digitalWrite(vibe,LOW);
+void setup(void) {
 #ifdef NFC_DEMO_DEBUG
   Serial.begin(9600);
   Serial.println("Hello!");
@@ -43,42 +37,23 @@ digitalWrite(vibe,LOW);
   nfc.SAMConfig();
 }
 
-
+char DataOut[]="HELLO TARGET!!!"; //16bytes
+char DataIn[16];//Should be 16bytes
 void loop(void) {
-  uint32_t id;
-  // look for MiFare type cards
-  id = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A);
 
-  if (id == 3296227291) {
-    Serial.print("Yay that's the one!");
-    digitalWrite(3, HIGH);
-    digitalWrite(vibe, HIGH);
-    delay(500);
-    digitalWrite(vibe,LOW);
+  // Configure PN532 as Peer to Peer Initiator in active mode
+  if( nfc.configurePeerAsInitiator(PN532_BAUDRATE_424K) ) //if connection is error-free
+  {
+    //trans-receive data
+    if(nfc.initiatorTxRx(DataOut,DataIn))
+    {
+#ifdef NFC_DEMO_DEBUG
+      Serial.print("Data Sent and Received: ");
+      Serial.println(DataIn);
+#endif
+    }
   }
-  else {
-  digitalWrite(3,LOW);
-  digitalWrite(vibe,LOW);
-  }
-  if (id == 1948510015) {
-    Serial.print("That's the other one!");
-    digitalWrite(3,HIGH);
-    digitalWrite(vibe,HIGH);
-    delay(300);
-    digitalWrite(3,LOW);
-    digitalWrite(vibe,LOW);
-    delay(300);
-    digitalWrite(3,HIGH);
-    digitalWrite(vibe,HIGH);
-    delay(300);
-    digitalWrite(3,LOW);
-    digitalWrite(vibe,LOW);
-  }
-  else {
-    digitalWrite(3,LOW);
-    digitalWrite(vibe,LOW);
-  }
-  
 }
+
 
 
